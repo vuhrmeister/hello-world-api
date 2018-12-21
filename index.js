@@ -65,8 +65,12 @@ server.listen(SERVER_PORT, () => {
 function getHandler (path, method) {
   const endpoint = api[path]
 
-  if (endpoint && typeof endpoint[method] === 'function') {
-    return handler = endpoint[method]
+  if (endpoint) {
+    if (typeof endpoint[method] === 'function') {
+      return endpoint[method]
+    } else {
+      return methodNotAllowedHandler
+    }
   }
 
   return notFoundHandler
@@ -74,4 +78,8 @@ function getHandler (path, method) {
 
 function notFoundHandler ({ setStatusCode }) {
   setStatusCode(404)
+}
+
+function methodNotAllowedHandler ({ setStatusCode }) {
+  setStatusCode(405)
 }
